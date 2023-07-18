@@ -28,14 +28,17 @@ const Content = () => {
       setTask("");
     }
   };
-
   const toggleTaskStatus = (taskId) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId ? { ...task, status: "active" } : task
+        task.id === taskId
+          ? {
+              ...task,
+              status: task.status === "active" ? "completed" : "active",
+            }
+          : task
       )
     );
-    localStorage.setItem("localTasks", JSON.stringify(tasks));
   };
 
   const toggleTaskCompleted = (taskId) => {
