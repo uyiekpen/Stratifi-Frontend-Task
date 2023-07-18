@@ -1,14 +1,10 @@
-import { Transition } from "@headlessui/react";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
-import { useTimeoutFn } from "react-use";
 
 const Content = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
-  const [isShowing, setIsShowing] = useState(true);
-  const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
   useEffect(() => {
     if (localStorage.getItem("localTasks")) {
@@ -86,8 +82,6 @@ const Content = () => {
             }`}
             onClick={() => {
               onTabClick("All");
-              setIsShowing(false);
-              resetIsShowing();
             }}
           >
             All
@@ -99,8 +93,6 @@ const Content = () => {
                 : "bg-white text-[#2F80ED]"
             }`}
             onClick={() => {
-              setIsShowing(false);
-              resetIsShowing();
               onTabClick("Active");
             }}
           >
@@ -113,118 +105,109 @@ const Content = () => {
                 : "bg-white text-[#2F80ED]"
             }`}
             onClick={() => {
-              setIsShowing(false);
-              resetIsShowing();
               onTabClick("Completed");
             }}
           >
             Completed{" "}
           </button>
         </div>
-        <Transition
-          as={Fragment}
-          show={isShowing}
-          enter="transition-opacity duration-150"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-        >
-          <div className="bg-white p-4  mt-2">
-            {activeTab === "All" && (
-              <div>
-                <div className="flex w-[300px] md:w-[500px] ">
-                  <input
-                    className="appearance-none block w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    type="text"
-                    placeholder="add details"
-                    name="task"
-                    onChange={(e) => setTask(e.target.value)}
-                    value={task}
-                  />
-                  <button
-                    type="submit"
-                    onClick={addTask}
-                    className="w-full flex ml-2 justify-center items-center py-1 px-1 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-[#2F80ED] hover:bg-red-500 capitalize focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Submit
-                  </button>
-                </div>
 
-                <div className="flex justify-between  flex-col mt-4">
-                  {tasks.map((task) => (
-                    <React.Fragment key={task.id}>
-                      <li
-                        key={task.id}
-                        className="form-control bg-white mt-3 rounded-md  p-3 flex shadow-md text-lg font-semibold"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={task.status === "active"}
-                          onChange={() => toggleTaskStatus(task.id)}
-                        />{" "}
-                        <div className="ml-2">{task.title}</div>
-                      </li>
-                    </React.Fragment>
-                  ))}
-                </div>
+        <div className="bg-white p-4  mt-2">
+          {activeTab === "All" && (
+            <div>
+              <div className="flex w-[300px] md:w-[500px] ">
+                <input
+                  className="appearance-none block w-full px-6 py-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  type="text"
+                  placeholder="add details"
+                  name="task"
+                  onChange={(e) => setTask(e.target.value)}
+                  value={task}
+                />
+                <button
+                  type="submit"
+                  onClick={addTask}
+                  className="w-full flex ml-2 justify-center items-center py-1 px-1 border border-transparent rounded-md shadow-sm text-xs font-medium text-white bg-[#2F80ED] hover:bg-red-500 capitalize focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Submit
+                </button>
               </div>
-            )}
 
-            {activeTab === "Active" && (
-              <div className="mt-4">
-                {/* Render active tasks */}
-                {activeTasks.map((task) => (
+              <div className="flex justify-between  flex-col mt-4">
+                {tasks.map((task) => (
                   <React.Fragment key={task.id}>
                     <li
                       key={task.id}
-                      className="form-control bg-white mt-2 p-3  rounded-md flex  w-[300px] md:w-[500px] shadow-md text-lg font-semibold "
+                      className="form-control bg-white mt-3 rounded-md  p-3 flex shadow-md text-lg font-semibold"
                     >
                       <input
                         type="checkbox"
-                        checked={task.status === "completed"}
-                        onChange={() => toggleTaskCompleted(task.id)}
+                        checked={task.status === "active"}
+                        onChange={() => toggleTaskStatus(task.id)}
                       />{" "}
                       <div className="ml-2">{task.title}</div>
                     </li>
                   </React.Fragment>
                 ))}
               </div>
-            )}
+            </div>
+          )}
 
-            {activeTab === "Completed" && (
-              <div className="mt-4">
-                {completedTasks.map((task) => (
-                  <React.Fragment key={task.id}>
-                    <div className="">
-                      <li
-                        key={task.id}
-                        className="form-control bg-white mt-2 p-3 flex justify-between  w-[300px] md:w-[500px]  shadow-md text-lg rounded-md font-semibold "
-                      >
-                        <div className="flex">
-                          <input type="checkbox" checked />
-                          <div className="ml-2">{task.title}</div>
-                        </div>
-                        <div onClick={() => handleDelete(task)}>
-                          <MdDelete />
-                        </div>
-                      </li>
-                      <div className="flex justify-end">
-                        <button
-                          type="submit"
-                          onClick={() => {
-                            handleClear();
-                          }}
-                          className=" mt-6 flex ml-2 justify-center py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-500 capitalize focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          delete all task
-                        </button>
+          {activeTab === "Active" && (
+            <div className="mt-4">
+              {/* Render active tasks */}
+              {activeTasks.map((task) => (
+                <React.Fragment key={task.id}>
+                  <li
+                    key={task.id}
+                    className="form-control bg-white mt-2 p-3  rounded-md flex  w-[300px] md:w-[500px] shadow-md text-lg font-semibold "
+                  >
+                    <input
+                      type="checkbox"
+                      checked={task.status === "completed"}
+                      onChange={() => toggleTaskCompleted(task.id)}
+                    />{" "}
+                    <div className="ml-2">{task.title}</div>
+                  </li>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+
+          {activeTab === "Completed" && (
+            <div className="mt-4">
+              {completedTasks.map((task) => (
+                <React.Fragment key={task.id}>
+                  <div className="">
+                    <li
+                      key={task.id}
+                      className="form-control bg-white mt-2 p-3 flex justify-between  w-[300px] md:w-[500px]  shadow-md text-lg rounded-md font-semibold "
+                    >
+                      <div className="flex">
+                        <input type="checkbox" checked />
+                        <div className="ml-2">{task.title}</div>
                       </div>
+                      <div onClick={() => handleDelete(task)}>
+                        <MdDelete />
+                      </div>
+                    </li>
+                    <div className="flex justify-end">
+                      <button
+                        type="submit"
+                        onClick={() => {
+                          handleClear();
+                        }}
+                        className=" mt-6 flex ml-2 justify-center py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-500 capitalize focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        delete all task
+                      </button>
                     </div>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
-          </div>
-        </Transition>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
