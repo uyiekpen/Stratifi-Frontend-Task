@@ -178,33 +178,31 @@ const Content = () => {
             <div className="mt-4">
               {completedTasks.map((task) => (
                 <React.Fragment key={task.id}>
-                  <div className="">
-                    <li
-                      key={task.id}
-                      className="form-control bg-white mt-2 p-3 flex justify-between  w-[300px] md:w-[500px]  shadow-md text-lg rounded-md font-semibold "
-                    >
-                      <div className="flex">
-                        <input type="checkbox" checked />
-                        <div className="ml-2">{task.title}</div>
-                      </div>
-                      <div onClick={() => handleDelete(task)}>
-                        <MdDelete />
-                      </div>
-                    </li>
-                    <div className="flex justify-end">
-                      <button
-                        type="submit"
-                        onClick={() => {
-                          handleClear();
-                        }}
-                        className=" mt-6 flex ml-2 justify-center py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-500 capitalize focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        delete all task
-                      </button>
+                  <li
+                    key={task.id}
+                    className="form-control bg-white mt-2 p-3 flex justify-between  w-[300px] md:w-[500px]  shadow-md text-lg rounded-md font-semibold "
+                  >
+                    <div className="flex">
+                      <input type="checkbox" checked />
+                      <div className="ml-2">{task.title}</div>
                     </div>
-                  </div>
+                    <div onClick={() => handleDelete(task)}>
+                      <MdDelete />
+                    </div>
+                  </li>
                 </React.Fragment>
               ))}
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  onClick={() => {
+                    handleClear();
+                  }}
+                  className=" mt-6 flex ml-2 justify-center py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-500 capitalize focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  delete all task
+                </button>
+              </div>
             </div>
           )}
         </div>
