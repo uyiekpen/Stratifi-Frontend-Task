@@ -32,12 +32,7 @@ const Content = () => {
   const toggleTaskStatus = (taskId) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              status: task.status === "active" ? "completed" : "active",
-            }
-          : task
+        task.id === taskId ? { ...task, status: "active" } : task
       )
     );
     localStorage.setItem("localTasks", JSON.stringify(tasks));
@@ -59,8 +54,9 @@ const Content = () => {
   };
 
   const handleClear = () => {
-    setTasks([]);
-    localStorage.removeItem("localTasks");
+    const activeTasks = tasks.filter((task) => task.status !== "completed");
+    setTasks(activeTasks);
+    localStorage.setItem("localTasks", JSON.stringify(activeTasks));
   };
 
   const activeTasks = tasks.filter((task) => task.status === "active");
